@@ -21,6 +21,8 @@ public class JdbcUserDao implements UserDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    private final BigDecimal STARTING_BALANCE = new BigDecimal(1000);
+
     @Override
     public int findIdByUsername(String username) {
         String sql = "SELECT user_id FROM tenmo_user WHERE username ILIKE ?;";
@@ -58,7 +60,7 @@ public class JdbcUserDao implements UserDao {
     public boolean create(String username, String password) {
 
         // create user
-        String sql = "INSERT INTO tenmo_user (username, password_hash) VALUES (?, ?) RETURNING user_id";
+        String sql = "INSERT INTO tenmo_user (username, password_hash) VALUES (?, ?) RETURNING user_id;";
         String password_hash = new BCryptPasswordEncoder().encode(password);
         Integer newUserId;
         try {
@@ -68,7 +70,13 @@ public class JdbcUserDao implements UserDao {
         }
 
         // TODO: Create the account record with initial balance
-
+        String sql2 = "INSERT INTO account (balance, user_id) VALUES (?, ?) RETURNING account_id;";
+        Integer newAccountId;
+        try {
+            newAccountId = jdbcTemplate.queryForObject(sql2, Integer.class, STARTING_BALANCE, newUserId);
+        }catch (DataAccessException e) {
+            System.out.println("Bad request");
+        }
         return true;
     }
 
