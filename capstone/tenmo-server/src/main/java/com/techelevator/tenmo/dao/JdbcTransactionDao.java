@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,36 @@ public class JdbcTransactionDao implements TransactionDao {
         }
         return recipientList;
     }
+
+    @Override
+    public boolean sendTransaction(int senderId, int recipientId, BigDecimal amount) {
+
+        if (recipientId == senderId || amount.compareTo(BigDecimal.ZERO) <= 0) { return false;}
+        else {
+            String sql =
+                    "BEGIN TRANSACTION;\n" +
+                            "\n" +
+                            "\tINSERT INTO transaction VALUES (?, ?, ?) RETURNING transaction_id;\n" +
+                            "\n" +
+                            "\tUPDATE account SET balance - (SELECT amount FROM transaction WHERE account_id = ?) WHERE account_id = \n" +
+                            "\t\t(SELECT sender_id FROM transaction WHERE sender_id = ?);\n" +
+                            "\t\t\n" +
+                            "\tUPDATE account SET balance + (SELECT amount FROM transaction WHERE account_id = ?) WHERE account_id =\n" +
+                            "\t\t(SELECT recipient_id FROM transaction WHERE recipient_id = ?);\n" +
+                            "\t\t\n" +
+                            "COMMIT;";
+
+            this.jdbcTemplate.update(sql, senderId, recipientId, amount, senderId, senderId, recipientId, recipientId);
+        }
+        return true;
+    }
+
+
+
+
+
+
+
 
     private Transaction mapRowToTransaction(SqlRowSet rowSet) {
         Transaction transaction = new Transaction();
