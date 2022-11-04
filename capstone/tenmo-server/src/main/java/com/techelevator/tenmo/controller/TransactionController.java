@@ -2,10 +2,8 @@ package com.techelevator.tenmo.controller;
 
 import com.techelevator.tenmo.dao.TransactionDao;
 import com.techelevator.tenmo.model.Transaction;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.techelevator.tenmo.model.User;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,10 +18,9 @@ public class TransactionController {
         this.transactionDao = transactionDao;
     }
 
-    @GetMapping
-    public List<Transaction> getAllUsers() {return this.transactionDao.getAllUsers();}
 
-    @PutMapping
-    public boolean sendTransaction(int senderId, int recipientId, BigDecimal amount) {return this.transactionDao.sendTransaction();}
+    @PostMapping("")
+    public boolean sendTransaction(@RequestParam int senderId, @RequestParam int recipientId, @RequestParam BigDecimal amount) {
+        return this.transactionDao.sendTransaction(senderId, recipientId, amount);}
 
 }

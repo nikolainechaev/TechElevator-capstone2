@@ -7,6 +7,5 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface TransactionDao {
-    List<Transaction> getAllUsers();
     boolean sendTransaction(int senderId, int recipientId, BigDecimal amount);
 }

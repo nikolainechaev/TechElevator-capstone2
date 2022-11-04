@@ -23,7 +23,6 @@ private final JdbcTemplate jdbcTemplate;
     BigDecimal balance = this.jdbcTemplate.queryForObject(sql, BigDecimal.class, id);
         return balance;
 
-
     }
 
     private Account mapRowToAccount(SqlRowSet rs) {
