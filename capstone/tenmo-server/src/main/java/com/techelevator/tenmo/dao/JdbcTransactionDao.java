@@ -31,14 +31,12 @@ public class JdbcTransactionDao implements TransactionDao {
         try {
             transaction = this.jdbcTemplate.queryForObject(sql1, Transaction.class, senderId, recipientId, amount);
             return transaction;
-        } catch (DataAccessException e){
+        } catch (DataAccessException e) {
             System.out.println("Bad Request");
         }
 
-
-
         String sql2 = "UPDATE account SET balance = (balance - ?) WHERE account_id = ? \n;" +
-                    "\tUPDATE account SET balance = (balance + ?) WHERE account_id = ?;";
+                "\tUPDATE account SET balance = (balance + ?) WHERE account_id = ?;";
         try {
             this.jdbcTemplate.update(sql2, amount, senderId, amount, recipientId);
         } catch (DataAccessException e) {
@@ -47,8 +45,26 @@ public class JdbcTransactionDao implements TransactionDao {
         return null;
     }
 
+    public List<Transaction> allTransactions(int userId) {
+        List<Transaction> transactions = new ArrayList<>();
 
-    private Transaction mapRowToTransaction(SqlRowSet rowSet) {
+        String sql = "SELECT transaction_id, sender_id, recipient_id, amount\n" +
+                "FROM transaction as t\n" +
+                "JOIN account AS a ON t.sender_id = a.account_id\n" +
+                "WHERE user_id = ?;";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+        while (results.next()) {
+            transactions.add(mapRowToTransaction(results));
+
+        }
+        return transactions;
+
+
+    }
+
+
+    public Transaction mapRowToTransaction(SqlRowSet rowSet) {
         Transaction transaction = new Transaction();
         transaction.setTransactionId(rowSet.getInt("transaction_id"));
         transaction.setSenderId(rowSet.getInt("sender_id"));
