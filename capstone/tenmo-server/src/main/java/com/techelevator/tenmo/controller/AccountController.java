@@ -17,8 +17,8 @@ private AccountDao accountDao;
     }
 
     @GetMapping("/account/{id}")
-    public BigDecimal getBalance (@PathVariable int id) {
-    return this.accountDao.getBalance(id);
+    public BigDecimal getBalanceByUserId (@PathVariable int id) {
+    return this.accountDao.getBalanceByUserId(id);
 }
 
 

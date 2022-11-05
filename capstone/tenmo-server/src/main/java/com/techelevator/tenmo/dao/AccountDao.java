@@ -1,8 +1,11 @@
 package com.techelevator.tenmo.dao;
 
-import java.math.BigDecimal;
+import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+@Component
 public interface AccountDao {
 
-    BigDecimal getBalance (int id);
+    BigDecimal getBalanceByUserId (int id);
+
 }

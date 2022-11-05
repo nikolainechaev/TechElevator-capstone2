@@ -22,25 +22,21 @@ public class JdbcTransactionDao implements TransactionDao {
 
 
     @Override
-    public boolean sendTransaction(int senderId, int recipientId, BigDecimal amount) {
+    public Transaction sendTransaction(int senderId, int recipientId, BigDecimal amount) {
+//"transfer amount must be greater than 0 argument": amount.compareTo(BigDecimal.ZERO) <= 0 ||
 
-       Account sender = new Account();
-
-        if (recipientId == senderId || amount.compareTo(BigDecimal.ZERO) <= 0 || amount.compareTo(sender.getBalance(senderId)) < 0) {return false;}
+        if (recipientId == senderId || amount.compareTo(sender.getBalance(senderId)) < 0)
         else {
             String sql =
-                    "BEGIN TRANSACTION;\n" +
-                            "\n" +
-                            "\tINSERT INTO transaction (sender_id, recipient_id, amount) VALUES (?, ?, ?) RETURNING transaction_id;\n" +
+
+                            "INSERT INTO transaction (sender_id, recipient_id, amount) VALUES (?, ?, ?) RETURNING transaction_id;\n" +
                             "\n" +
                             "\tUPDATE account SET balance = (balance - ?) WHERE account_id = ? \n;" +
-                            "\tUPDATE account SET balance = (balance + ?) WHERE account_id = ? \n;" +
-                            "\n" +
-                     "COMMIT;";
+                            "\tUPDATE account SET balance = (balance + ?) WHERE account_id = ? \n;";
 
             this.jdbcTemplate.update(sql, senderId, recipientId, amount, amount, senderId, amount, recipientId);
         }
-        return true;
+
     }
 
 

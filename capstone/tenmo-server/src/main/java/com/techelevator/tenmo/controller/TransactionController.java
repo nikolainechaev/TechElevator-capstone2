@@ -1,10 +1,15 @@
 package com.techelevator.tenmo.controller;
 
+import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.TransactionDao;
+import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transaction;
 import com.techelevator.tenmo.model.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -13,14 +18,18 @@ import java.util.List;
 public class TransactionController {
 
     private TransactionDao transactionDao;
+    private AccountDao accountDao;
 
-    public TransactionController(TransactionDao transactionDao) {
+    public TransactionController(TransactionDao transactionDao, AccountDao accountDao) {
         this.transactionDao = transactionDao;
+        this.accountDao = accountDao;
     }
 
 
     @PostMapping("")
-    public boolean sendTransaction(@RequestParam int senderId, @RequestParam int recipientId, @RequestParam BigDecimal amount) {
-        return this.transactionDao.sendTransaction(senderId, recipientId, amount);}
+    public Transaction sendTransaction(@RequestParam int senderId, @RequestParam int recipientId, @RequestParam @Valid BigDecimal amount) {
+        if (senderId == recipientId) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User registration failed.");}
+        else ()
+       this.transactionDao.sendTransaction(senderId, recipientId, amount);}
 
 }

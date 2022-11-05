@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.model;
 
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 
 public class Transaction {
@@ -7,6 +8,7 @@ public class Transaction {
 int transactionId;
 int senderId;
 int recipientId;
+@Min(0)
 BigDecimal amount;
 
     public Transaction(int transactionId, int senderId, int recipientId, BigDecimal amount) {

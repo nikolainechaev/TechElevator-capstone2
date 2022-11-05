@@ -15,7 +15,7 @@ private final JdbcTemplate jdbcTemplate;
     }
 
     @Override
-    public BigDecimal getBalance(int id) {
+    public BigDecimal getBalanceByUserId(int id) {
         final String sql = "SELECT balance\n" +
                             "FROM account\n" +
                            "WHERE user_id = ?";
