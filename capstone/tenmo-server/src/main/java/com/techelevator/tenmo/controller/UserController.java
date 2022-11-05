@@ -22,4 +22,7 @@ public class UserController {
     @GetMapping
     List<User> findAll() {return this.userDao.findAll();}
 
+    @GetMapping("/{id}/balance")
+    BigDecimal getBalanceByUserId(@PathVariable Long id) {return this.userDao.getBalanceByUserId(id);}
+
 }

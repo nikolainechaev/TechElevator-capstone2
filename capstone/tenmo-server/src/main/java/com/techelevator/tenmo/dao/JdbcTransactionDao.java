@@ -3,10 +3,12 @@ package com.techelevator.tenmo.dao;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transaction;
 import com.techelevator.tenmo.model.User;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,23 +22,29 @@ public class JdbcTransactionDao implements TransactionDao {
     }
 
 
-
     @Override
     public Transaction sendTransaction(int senderId, int recipientId, BigDecimal amount) {
-//"transfer amount must be greater than 0 argument": amount.compareTo(BigDecimal.ZERO) <= 0 ||
 
-        if (recipientId == senderId || amount.compareTo(sender.getBalance(senderId)) < 0)
-        else {
-            String sql =
+        String sql1 = "INSERT INTO transaction (sender_id, recipient_id, amount) VALUES (?, ?, ?) RETURNING transaction_id;";
 
-                            "INSERT INTO transaction (sender_id, recipient_id, amount) VALUES (?, ?, ?) RETURNING transaction_id;\n" +
-                            "\n" +
-                            "\tUPDATE account SET balance = (balance - ?) WHERE account_id = ? \n;" +
-                            "\tUPDATE account SET balance = (balance + ?) WHERE account_id = ? \n;";
-
-            this.jdbcTemplate.update(sql, senderId, recipientId, amount, amount, senderId, amount, recipientId);
+        Transaction transaction;
+        try {
+            transaction = this.jdbcTemplate.queryForObject(sql1, Transaction.class, senderId, recipientId, amount);
+            return transaction;
+        } catch (DataAccessException e){
+            System.out.println("Bad Request");
         }
 
+
+
+        String sql2 = "UPDATE account SET balance = (balance - ?) WHERE account_id = ? \n;" +
+                    "\tUPDATE account SET balance = (balance + ?) WHERE account_id = ?;";
+        try {
+            this.jdbcTemplate.update(sql2, amount, senderId, amount, recipientId);
+        } catch (DataAccessException e) {
+            System.out.println("Bad Request");
+        }
+        return null;
     }
 
 

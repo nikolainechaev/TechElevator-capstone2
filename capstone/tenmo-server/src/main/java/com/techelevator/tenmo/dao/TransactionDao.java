@@ -9,5 +9,6 @@ import java.util.List;
 @Component
 
 public interface TransactionDao {
-    boolean sendTransaction(int senderId, int recipientId, BigDecimal amount);
+    Transaction sendTransaction(int senderId, int recipientId, BigDecimal amount);
+
 }

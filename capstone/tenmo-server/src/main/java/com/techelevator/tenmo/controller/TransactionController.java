@@ -28,8 +28,7 @@ public class TransactionController {
 
     @PostMapping("")
     public Transaction sendTransaction(@RequestParam int senderId, @RequestParam int recipientId, @RequestParam @Valid BigDecimal amount) {
-        if (senderId == recipientId) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User registration failed.");}
-        else ()
-       this.transactionDao.sendTransaction(senderId, recipientId, amount);}
-
+        if (senderId == recipientId) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Receiving account cannot be same as sending account.");}
+        else if (this.accountDao.getBalanceByAccountId(senderId).compareTo(amount) < 0) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient Funds.");}
+        return this.transactionDao.sendTransaction(senderId, recipientId, amount);}
 }

@@ -15,12 +15,12 @@ private final JdbcTemplate jdbcTemplate;
     }
 
     @Override
-    public BigDecimal getBalanceByUserId(int id) {
+    public BigDecimal getBalanceByAccountId(int accountId) {
         final String sql = "SELECT balance\n" +
                             "FROM account\n" +
-                           "WHERE user_id = ?";
+                           "WHERE account_id = ?";
 
-    BigDecimal balance = this.jdbcTemplate.queryForObject(sql, BigDecimal.class, id);
+    BigDecimal balance = this.jdbcTemplate.queryForObject(sql, BigDecimal.class, accountId);
         return balance;
 
     }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
 @RestController
-@RequestMapping
+@RequestMapping("/account")
 
 public class AccountController {
 
@@ -16,9 +16,9 @@ private AccountDao accountDao;
         this.accountDao = accountDao;
     }
 
-    @GetMapping("/account/{id}")
-    public BigDecimal getBalanceByUserId (@PathVariable int id) {
-    return this.accountDao.getBalanceByUserId(id);
+    @GetMapping("/{id}")
+    public BigDecimal getBalanceByAccountId (@PathVariable int accountId) {
+    return this.accountDao.getBalanceByAccountId(accountId);
 }
 
 

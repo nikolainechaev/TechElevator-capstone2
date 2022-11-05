@@ -24,6 +24,19 @@ public class JdbcUserDao implements UserDao {
 
     private final BigDecimal STARTING_BALANCE = new BigDecimal(1000);
 
+
+    @Override
+    public BigDecimal getBalanceByUserId(Long id) {
+        final String sql =
+                "SELECT balance\n" +
+                "FROM account\n" +
+                "WHERE user_id = ?";
+
+        BigDecimal balance = this.jdbcTemplate.queryForObject(sql, BigDecimal.class, id);
+        return balance;
+
+    }
+
     @Override
     public int findIdByUsername(String username) {
         String sql = "SELECT user_id FROM tenmo_user WHERE username ILIKE ?;";
@@ -48,6 +61,8 @@ public class JdbcUserDao implements UserDao {
         }
         return users;
     }
+
+
 
     @Override
     public User findByUsername(String username) throws UsernameNotFoundException {
