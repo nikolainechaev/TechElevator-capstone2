@@ -45,7 +45,7 @@ public class JdbcTransactionDao implements TransactionDao {
         return null;
     }
 
-    public List<Transaction> allTransactions(int userId) {
+    public List<Transaction> allTransactions(Long userId) {
         List<Transaction> transactions = new ArrayList<>();
 
         String sql = "SELECT transaction_id, sender_id, recipient_id, amount\n" +

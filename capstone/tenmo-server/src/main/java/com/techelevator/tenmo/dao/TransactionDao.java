@@ -12,7 +12,7 @@ import java.util.List;
 public interface TransactionDao {
     Transaction sendTransaction(int senderId, int recipientId, BigDecimal amount);
 
-    List <Transaction> allTransactions(int userId);
+    List <Transaction> allTransactions(Long userId);
 }
 
 
