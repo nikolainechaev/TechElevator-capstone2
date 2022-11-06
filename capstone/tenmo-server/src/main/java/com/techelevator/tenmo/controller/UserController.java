@@ -41,7 +41,7 @@ public class UserController {
     @GetMapping("/{id}/transfers")
     List<Transaction> allTransactionsByUserId(@PathVariable Long id) {
         return this.transactionDao.allTransactions(id);
-}       //We have use "userId" variable in () instead of just "id" look in the model.
-        //Also we have used wrong data type almost everywhere "int" instead of "Long".
+    }
+
 
 }

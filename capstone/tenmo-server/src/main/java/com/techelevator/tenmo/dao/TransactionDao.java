@@ -13,6 +13,8 @@ public interface TransactionDao {
     Transaction sendTransaction(int senderId, int recipientId, BigDecimal amount);
 
     List <Transaction> allTransactions(Long userId);
+
+    Transaction getTransaction (int transactionId);
 }
 
 

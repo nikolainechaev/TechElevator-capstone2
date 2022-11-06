@@ -32,4 +32,14 @@ public class TransactionController {
         else if (this.accountDao.getBalanceByAccountId(senderId).compareTo(amount) < 0) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient Funds.");}
         else System.out.println("Approved");
         return this.transactionDao.sendTransaction(senderId, recipientId, amount);}
+
+
+    @GetMapping("/{id}")
+    public Transaction getTransactionByTransactionId(@PathVariable int transactionId) {
+        return this.transactionDao.getTransaction(transactionId);
+    }
+
+
 }
+
+
