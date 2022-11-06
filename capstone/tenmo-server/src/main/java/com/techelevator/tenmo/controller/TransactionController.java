@@ -33,11 +33,11 @@ public class TransactionController {
         else System.out.println("Approved");
         return this.transactionDao.sendTransaction(senderId, recipientId, amount);}
 
-
-    @GetMapping("/{id}")
+    @GetMapping("/{transactionId}")
     public Transaction getTransactionByTransactionId(@PathVariable int transactionId) {
         return this.transactionDao.getTransaction(transactionId);
     }
+
 
 
 }

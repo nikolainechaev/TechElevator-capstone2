@@ -1,14 +1,11 @@
 package com.techelevator.tenmo.dao;
 
-import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transaction;
-import com.techelevator.tenmo.model.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import javax.xml.datatype.DatatypeConfigurationException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +46,9 @@ public class JdbcTransactionDao implements TransactionDao {
         List<Transaction> transactions = new ArrayList<>();
 
         String sql = "SELECT transaction_id, sender_id, recipient_id, amount\n" +
-                     "FROM transaction as t\n" +
-                     "JOIN account AS a ON t.sender_id = a.account_id\n" +
-                     "WHERE user_id = ?;";
+                "FROM transaction as t\n" +
+                "JOIN account AS a ON t.sender_id = a.account_id\n" +
+                "WHERE user_id = ?;";
 
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
         while (results.next()) {
@@ -61,16 +58,16 @@ public class JdbcTransactionDao implements TransactionDao {
         return transactions;
     }
 
-    public Transaction getTransaction (int transactionId) {
+    public Transaction getTransaction(int transactionId) {
 
         String sql = "SELECT transaction_id, sender_id, recipient_id, amount \n" +
-                     "FROM transaction \n" +
-                     "WHERE transaction_id = ?;";
+                "FROM transaction \n" +
+                "WHERE transaction_id = ?;";
 
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, transactionId);
+        SqlRowSet result = this.jdbcTemplate.queryForRowSet(sql, transactionId);
         Transaction transaction = null;
         if (result.next()) {
-            transaction = mapRowToTransaction(result);
+            transaction = this.mapRowToTransaction(result);
         }
         return transaction;
 

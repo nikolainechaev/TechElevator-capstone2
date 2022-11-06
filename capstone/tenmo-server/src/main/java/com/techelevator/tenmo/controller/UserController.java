@@ -5,14 +5,12 @@ import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Transaction;
 import com.techelevator.tenmo.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -42,6 +40,7 @@ public class UserController {
     List<Transaction> allTransactionsByUserId(@PathVariable Long id) {
         return this.transactionDao.allTransactions(id);
     }
+
 
 
 }
