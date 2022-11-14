@@ -28,16 +28,18 @@ public class TransactionController {
 
     @PostMapping("")
     public Transaction sendTransaction(@RequestParam int senderId, @RequestParam int recipientId, @RequestParam @Valid BigDecimal amount) {
-        if (senderId == recipientId) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Receiving account cannot be same as sending account.");}
-        else if (this.accountDao.getBalanceByAccountId(senderId).compareTo(amount) < 0) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient Funds.");}
-        else System.out.println("Approved");
-        return this.transactionDao.sendTransaction(senderId, recipientId, amount);}
+        if (senderId == recipientId) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Receiving account cannot be same as sending account.");
+        } else if (this.accountDao.getBalanceByAccountId(senderId).compareTo(amount) < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient Funds.");
+        } else System.out.println("Approved");
+        return this.transactionDao.sendTransaction(senderId, recipientId, amount);
+    }
 
     @GetMapping("/{transactionId}")
     public Transaction getTransactionByTransactionId(@PathVariable int transactionId) {
         return this.transactionDao.getTransaction(transactionId);
     }
-
 
 
 }
